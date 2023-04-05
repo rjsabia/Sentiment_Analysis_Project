@@ -4,6 +4,7 @@ import praw
 
 
 openai.api_key = os.getenv('OPEN_AI_KEY_01')
+# REDDIT Application ID and SECRET -- set as ENV
 REDDIT_CLIENT_ID = os.getenv('REDDIT_CLIENT_ID_01')
 REDDIT_SECRET = os.getenv('REDDIT_SECRET_01')
 
