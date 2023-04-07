@@ -32,6 +32,8 @@ subreddit_stocks = reddit.subreddit("stocks")
 # print('\n',subreddit_stocks.title)
 # subreddit_stocks.accounts_active
 
+# Example of how to get and drill into the Reddit data from post
+
 # for post in subreddit_stocks.hot(limit=5):
     # print('\n',post.title,'\n','##########################','\n')
     # submission = reddit.submission(post.id)
@@ -74,19 +76,20 @@ def get_titles_and_comments(subreddit="stocks",limit=6,num_comments=5,skip_first
     return title_and_comments
 
 titles_and_comments = get_titles_and_comments()
-# print("\n\n",": ) : ) : )","\n\n",titles_and_comments)
 
 def create_prompt(title_and_comments):
+    # Building prompt below
     task = "Return the stock ticker or company name mentioned in following title and comments and classify the sentiment around the company as positive, negative, or neutral. If no ticker or company is mentioned write 'No Company Mentioned'\n\n"
     return task+title_and_comments
 
+# Testing functionality below -----
 # print(titles_and_comments[1])
 # print(create_prompt(titles_and_comments[1]))
 
 for key, title_with_comments in titles_and_comments.items():
 
     prompt = create_prompt(title_with_comments)
-
+    # call to open AI
     response = openai.Completion.create(engine='text-davinci-003',
                                         prompt=prompt,
                                         max_tokens=256,
@@ -98,7 +101,7 @@ for key, title_with_comments in titles_and_comments.items():
     print(f"Sentiment Report from OpenAI: {response['choices'][0]['text']}")
     print('-------------------------------------------')
 
-    
+
 
 
 
