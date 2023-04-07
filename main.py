@@ -32,18 +32,18 @@ subreddit_stocks = reddit.subreddit("stocks")
 # print('\n',subreddit_stocks.title)
 # subreddit_stocks.accounts_active
 
-for post in subreddit_stocks.hot(limit=5):
-    print('\n',post.title,'\n','##########################','\n')
-    submission = reddit.submission(post.id)
+# for post in subreddit_stocks.hot(limit=5):
+    # print('\n',post.title,'\n','##########################','\n')
+    # submission = reddit.submission(post.id)
     # print top 2 comments per title submission
-    counter = 0
-    for comment in submission.comments:
-        print('COMMENT: ',comment.body,'\n')
-        counter+=1
-        if counter == 2:
-            break
+    # counter = 0
+    # for comment in submission.comments:
+        # print('COMMENT: ',comment.body,'\n')
+        # counter+=1
+        # if counter == 2:
+            # break
 
-def get_titles_and_comments(subreddit="stocks",limit=6,num_comments=3,skip_first=2):
+def get_titles_and_comments(subreddit="stocks",limit=6,num_comments=5,skip_first=2):
     subreddit = reddit.subreddit(subreddit)
     title_and_comments = {}
 
@@ -53,14 +53,43 @@ def get_titles_and_comments(subreddit="stocks",limit=6,num_comments=3,skip_first
             continue
 
         counter += (1-skip_first)
-
+   
         title_and_comments[counter] = ""
         # this is using the PRAW library again
         submission = reddit.submission(post.id)
         title = post.title
-
-        title_and_comments[counter] +='Title: '+title+"\n\n"
+        # Dictionary example --->>>
+        # {0: "Title: Post Title \n\n Comments: \n\n"}
+        title_and_comments[counter] +='\n\nTitle: '+title+"\n\n"
         title_and_comments[counter] += "Comments: \n\n"
+
+        comment_counter = 0
+        for comment in submission.comments:
+            if not comment.body == "[deleted]":
+                title_and_comments[counter] += comment.body+"\n"
+                comment_counter += 1
+            if comment_counter == num_comments:
+                break
+    
+    return title_and_comments
+
+titles_and_comments = get_titles_and_comments()
+# print("\n\n",": ) : ) : )","\n\n",titles_and_comments)
+
+def create_prompt(title_and_comments):
+    task = "Return the stock ticker or company name mentioned in following title and comments and classify the sentiment around the company as positive, negative, or neutral. If no ticker or company is mentioned write 'No Company Mentioned'\n\n"
+    return task+title_and_comments
+
+print(titles_and_comments[1])
+# print(titles_and_comments[2])
+
+
+
+
+
+
+
+
 
 
 
