@@ -60,7 +60,7 @@ def get_titles_and_comments(subreddit="stocks",limit=6,num_comments=5,skip_first
         title = post.title
         # Dictionary example --->>>
         # {0: "Title: Post Title \n\n Comments: \n\n"}
-        title_and_comments[counter] +='\n\nTitle: '+title+"\n\n"
+        title_and_comments[counter] +='Title: '+title+"\n\n"
         title_and_comments[counter] += "Comments: \n\n"
 
         comment_counter = 0
@@ -80,8 +80,34 @@ def create_prompt(title_and_comments):
     task = "Return the stock ticker or company name mentioned in following title and comments and classify the sentiment around the company as positive, negative, or neutral. If no ticker or company is mentioned write 'No Company Mentioned'\n\n"
     return task+title_and_comments
 
-print(titles_and_comments[1])
-# print(titles_and_comments[2])
+# print(titles_and_comments[1])
+# print(create_prompt(titles_and_comments[1]))
+
+for key, title_with_comments in titles_and_comments.items():
+
+    prompt = create_prompt(title_with_comments)
+
+    response = openai.Completion.create(engine='text-davinci-003',
+                                        prompt=prompt,
+                                        max_tokens=256,
+                                        temperature=0,
+                                        top_p=1.0
+                                        )
+
+    print("Below is the title and comments: \n\n",title_with_comments)
+    print(f"Sentiment Report from OpenAI: {response['choices'][0]['text']}")
+    print('-------------------------------------------')
+
+    
+
+
+
+
+
+
+
+
+
 
 
 
